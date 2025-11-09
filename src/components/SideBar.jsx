@@ -1,5 +1,5 @@
 import React from "react";
-import { Links, NavLink } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 const SideBar = () => {
   return (
@@ -11,13 +11,24 @@ const SideBar = () => {
         <NavLink
           to="/"
           className={({ isActive, isPending }) =>
-            `block px-4 py-3 rounded-tl-full rounded-bl-full  ${
+            `block px-4 py-3 rounded-tl-[10px] rounded-bl-[10px]  ${
               isPending ? "pending" : isActive ? "active" : ""
             }`
           }
         >
           
           Dashboard
+        </NavLink>
+        <NavLink
+          to="/launch"
+          className={({ isActive, isPending }) =>
+            `block px-4 py-3 rounded-tl-[10px] rounded-bl-[10px]  ${
+              isPending ? "pending" : isActive ? "active" : ""
+            }`
+          }
+        >
+          
+          Launch
         </NavLink>
 
         <a
