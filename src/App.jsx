@@ -4,6 +4,7 @@ import Home from "./components/Home";
 import ErrorElements from "./components/ErrorElements";
 import DashboardCard from "./components/DashboardCard";
 import Launch from "./components/pages/launch/Launch";
+import LoginForm from "./components/form/LoginForm";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
             <Route path="/launch" element={<Launch />} />
           </Route>
           <Route path="*" element={<ErrorElements />} />
+          <Route path="/login" element={<LoginForm />} />
         </Routes>
       </BrowserRouter>
     </>
