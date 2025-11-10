@@ -5,6 +5,7 @@ import ErrorElements from "./components/ErrorElements";
 import DashboardCard from "./components/DashboardCard";
 import Launch from "./components/pages/launch/Launch";
 import LoginForm from "./components/form/LoginForm";
+import RegisterForm from "./components/form/RegisterForm";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
           </Route>
           <Route path="*" element={<ErrorElements />} />
           <Route path="/login" element={<LoginForm />} />
+          <Route path="/register" element={<RegisterForm />} />
         </Routes>
       </BrowserRouter>
     </>
