@@ -1,7 +1,8 @@
 import FieldSet from "../inputs/FieldSet";
 import Field from "../inputs/Field";
 
-import { useFieldArray, useForm } from "react-hook-form";
+import { useFieldArray, useForm, Controller } from "react-hook-form";
+import NumberInput from "../inputs/NumberInput";
 
 const RegisterForm = () => {
   const {
@@ -31,12 +32,16 @@ const RegisterForm = () => {
             />
           </Field>
           <Field label="Age" error={errors.age}>
-            <input
-              {...register("age", { required: "age field is requerd" })}
-              type="number"
+            <Controller
               name="age"
-              id="age"
-              placeholder="age"
+              control={control}
+              render={({ field }) => <NumberInput id="age" {...field} />}
+              rules={{
+                max: {
+                  value: 100,
+                  message: "Age can be between 0 and 100",
+                },
+              }}
             />
           </Field>
           <Field label="Email" error={errors.email}>
@@ -67,7 +72,7 @@ const RegisterForm = () => {
         <FieldSet>
           {fields.map((field, index) => (
             <div key={field.id} className="d-flex gap-2">
-              <Field label="Social Name" >
+              <Field label="Social Name">
                 <input
                   {...register(`socials[${index}].name`, {
                     required: "social name field is requerd",
@@ -89,7 +94,7 @@ const RegisterForm = () => {
                   placeholder="social url"
                 />
               </Field>
-              <button onClick={()=>remove(index)}>Remove</button>
+              <button onClick={() => remove(index)}>Remove</button>
             </div>
           ))}
 
