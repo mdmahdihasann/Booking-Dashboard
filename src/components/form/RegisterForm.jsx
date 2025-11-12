@@ -1,109 +1,56 @@
 import FieldSet from "../inputs/FieldSet";
 import Field from "../inputs/Field";
-
-import { useFieldArray, useForm, Controller } from "react-hook-form";
-import NumberInput from "../inputs/NumberInput";
+import { createWithEmail } from "../firebase/firebase";
+import { useState } from "react";
+import { useNavigate, NavLink } from "react-router-dom";
 
 const RegisterForm = () => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    control,
-  } = useForm();
-  const { fields, append, remove } = useFieldArray({
-    name: "socials",
-    control,
-  });
-  const registers = (regData) => {
-    console.log(regData);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const navigate = useNavigate();
+
+  const handleResSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const user = await createWithEmail(email, password);
+      console.log(user);
+      navigate("/login")
+    } catch (error) {
+      console.log(error);
+    }
   };
+
   return (
     <>
-      <form onSubmit={handleSubmit(registers)}>
+      <form>
         <FieldSet label="Is a Register Form">
-          <Field label="Full Name" error={errors.fname}>
+          <Field label="Email">
             <input
-              {...register("fname", { required: "fName field is requerd" })}
-              type="text"
-              name="fname"
-              id="fname"
-              placeholder="first name"
-            />
-          </Field>
-          <Field label="Age" error={errors.age}>
-            <Controller
-              name="age"
-              control={control}
-              render={({ field }) => <NumberInput id="age" {...field} />}
-              rules={{
-                max: {
-                  value: 100,
-                  message: "Age can be between 0 and 100",
-                },
-              }}
-            />
-          </Field>
-          <Field label="Email" error={errors.email}>
-            <input
-              {...register("email", { required: "email field is requerd" })}
               type="email"
               name="email"
               id="email"
               placeholder="email"
+              onChange={(e) => setEmail(e.target.value)}
             />
           </Field>
-          <Field label="Password" error={errors.password}>
+          <Field label="Password">
             <input
-              {...register("password", {
-                required: "password field is requerd",
-                minLength: {
-                  value: 8,
-                  message: "this password length is minimun 8 lenght",
-                },
-              })}
               type="password"
               name="password"
               id="password"
               placeholder="password"
+              onChange={(e) => setPassword(e.target.value)}
             />
           </Field>
         </FieldSet>
-        <FieldSet>
-          {fields.map((field, index) => (
-            <div key={field.id} className="d-flex gap-2">
-              <Field label="Social Name">
-                <input
-                  {...register(`socials[${index}].name`, {
-                    required: "social name field is requerd",
-                  })}
-                  type="text"
-                  name={`socials[${index}].name`}
-                  id={`socials[${index}].name`}
-                  placeholder="social name"
-                />
-              </Field>
-              <Field label="Url">
-                <input
-                  {...register(`socials[${index}].url`, {
-                    required: "url field is requerd",
-                  })}
-                  type="text"
-                  name={`socials[${index}].url`}
-                  id={`socials[${index}].url`}
-                  placeholder="social url"
-                />
-              </Field>
-              <button onClick={() => remove(index)}>Remove</button>
-            </div>
-          ))}
-
-          <button onClick={() => append({ name: "", url: "" })}>
-            AddField
-          </button>
-        </FieldSet>
-        <button type="submit">Register</button>
+        <button type="submit" onClick={handleResSubmit}>
+          Register
+        </button>
       </form>
+
+      <p>Already have and account? {" "}
+        <NavLink to="/login">Login</NavLink>
+      </p>
     </>
   );
 };

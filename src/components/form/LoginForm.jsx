@@ -1,65 +1,55 @@
 import FieldSet from "../inputs/FieldSet";
 import Field from "../inputs/Field";
+import { NavLink, useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { signWithloginAndAccount } from "../firebase/firebase";
 
-import { useForm } from "react-hook-form";
 
 const LoginForm = () => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    setError,
-  } = useForm();
+  const navigator = useNavigate();
+  const [email, setEmail] = useState("");
+  const [password, setPassword]= useState("");
 
-  const onhandle = (onAddd) => {
-    console.log(onAddd);
-    const user = { email: "sojibe@gmail.com", password: "12345678" };
-
-    const login =
-      onAddd.email === user.email && onAddd.password === user.password;
-
-    if (!login) {
-      setError("loginError", {
-        type: "custom",
-        message: "this field is occourd",
-      });
-    }else{
-        console.log("login successfully!");
-        
+  const handleLogin = async(e)=>{
+    e.preventDefault();
+    try {
+      await signWithloginAndAccount(email, password);
+      navigator("/")
+    } catch (error) {
+      console.log(error);
+      
     }
-  };
+  }
+ 
   return (
     <>
-      <form className="h-screen m-auto" onSubmit={handleSubmit(onhandle)}>
+      <form  >
         <FieldSet label="LOGIN PAGE">
-          <Field label="User Name" error={errors.email}>
+          <Field label="User Name" >
             <input
-              {...register("email", { required: "Email Field is Required" })}
               type="email"
               name="email"
               id="email"
               placeholder="enter your name"
+              onChange={(e)=>setEmail(e.target.value)}
             />
           </Field>
-          <Field label="Password" error={errors.password}>
+          <Field label="Password" >
             <input
-              {...register("password", {
-                required: "password Field is Required",
-                minLength: {
-                  value: 8,
-                  message: "your password must be at latest 8 characters",
-                },
-              })}
               type="password"
               name="password"
               id="password"
               placeholder="enter your password"
+              onChange={(e)=>setPassword(e.target.value)}
             />
           </Field>
-          <button type="submit">Submit</button>
-          <div>{errors?.loginError?.message}</div>
+          <button type="submit" onClick={handleLogin}>Submit</button>
         </FieldSet>
       </form>
+
+      <p>with out login 1st time {" "}
+        <NavLink to="/register">Register</NavLink>
+      </p>
     </>
   );
 };
