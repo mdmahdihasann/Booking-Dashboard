@@ -19,7 +19,7 @@ function DashboardCard() {
       .catch((error) => console.log(error));
   }
   return (
-    <div>
+    <div> 
       {user && (
         <p>
           {user.email}, <button onClick={handleLogout}>SignOut</button>
