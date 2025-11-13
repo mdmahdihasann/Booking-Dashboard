@@ -9,17 +9,19 @@ function DashboardCard() {
 
   if (loading) return <p>loading data....</p>;
   if (error) return <p>Error data</p>;
+  if (!auth) return <p>Auth not initialized</p>;
 
-  function handleLogout() {
-    signOut(auth)
-      .then(() => {
-        navigate("/login");
-        console.log("signOut");
-      })
-      .catch((error) => console.log(error));
-  }
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+      navigate("/login");
+      console.log("signout successfully");
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
-    <div> 
+    <div>
       {user && (
         <p>
           {user.email}, <button onClick={handleLogout}>SignOut</button>
